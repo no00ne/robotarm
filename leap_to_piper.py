@@ -116,8 +116,9 @@ def main():
     # Immediately zero once (as requested)
     print("[main] Zeroing robot now (one-time after ConnectPort())")
     try:
-        piper.ModeCtrl(0x01, 0x01, 30, 0x00)  # CAN control, move mode P
-        piper.JointCtrl(0, 0, 0, 0, 0, 0)
+        piper.ModeCtrl(0x01, 0x00, 30, 0x00)  # CAN control, move mode P
+
+        piper.EndPoseCtrl(257384, 4793, 147021, -173360, 65070, -169444)
         piper.GripperCtrl(0, 1000, 0x01, 0)   # enable gripper position 0
     except Exception as e:
         print("[main] Warning: zeroing commands raised:", e)
@@ -142,7 +143,7 @@ def main():
     c_frame_ids_seen = set()     # unique frame ids observed this second
     last_stats_time = time.time()
     last_frame_id_seen = None    # for delta-based C fps if desired
-
+    time.sleep(2)
     try:
         while True:
             # request next event with small timeout to allow loop timing
@@ -190,8 +191,8 @@ def main():
                     dx = int(ev.get("X", 0))
                     dy = int(ev.get("Y", 0))
                     dz = int(ev.get("Z", 0))
-                    rx = int(ev.get("RX", 0))-90000
-                    ry = int(ev.get("RY", 0))+90000
+                    rx = int(ev.get("RX", 0))-180000
+                    ry = (-int(ev.get("RY", 0)))+90000
                     rz = int(ev.get("RZ", 0))-180000
                     pinch = float(ev.get("pinch_strength", 0.0))
 
