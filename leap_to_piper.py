@@ -229,13 +229,15 @@ def main():
                     nrz = limit_angle_step(tgt_RZ, None if last_sent_pose is None else last_sent_pose[5], MAX_STEP_ANGLE_UNITS)
 
                     # clamp angles to reasonable bounds
-                    def clamp_angle_md(x):
-                        if x > 180000:
-                            return 180000
-                        if x < -180000:
-                            return -180000
+                    def wrap_angle_md(x):
+                        """把角度限制在 [-180000, 180000] 区间 (millidegree)"""
+                        x = ((x + 180000) % 360000) - 180000
                         return x
-                    nrx = clamp_angle_md(nrx); nry = clamp_angle_md(nry); nrz = clamp_angle_md(nrz)
+
+                    # 使用
+                    nrx = wrap_angle_md(nrx)
+                    nry = wrap_angle_md(nry)
+                    nrz = wrap_angle_md(nrz)
 
                     # send to arm
                     try:

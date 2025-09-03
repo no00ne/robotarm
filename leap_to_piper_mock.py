@@ -55,9 +55,9 @@ def limit_angle_step(target_md: int, last_md: int or None, max_step_md: int) -> 
         diff = -max_step_md
     return int(last_md + diff)
 
-def clamp_md(x: int) -> int:
-    if x > 180000: return 180000
-    if x < -180000: return -180000
+def wrap_angle_md(x):
+    """把角度限制在 [-180000, 180000] 区间 (millidegree)"""
+    x = ((x + 180000) % 360000) - 180000
     return x
 
 # ---------- main test harness ----------
@@ -164,7 +164,9 @@ def main():
                 nry = limit_angle_step(tgt_RY, None if last_sent_pose is None else last_sent_pose[4], MAX_STEP_ANGLE_UNITS)
                 nrz = limit_angle_step(tgt_RZ, None if last_sent_pose is None else last_sent_pose[5], MAX_STEP_ANGLE_UNITS)
 
-                nrx = clamp_md(nrx); nry = clamp_md(nry); nrz = clamp_md(nrz)
+                nrx = wrap_angle_md(nrx)
+                nry = wrap_angle_md(nry)
+                nrz = wrap_angle_md(nrz)
 
                 # PRINT what would be sent to Piper
                 print("-----------------------------------------------------------")
