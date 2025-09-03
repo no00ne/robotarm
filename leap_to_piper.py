@@ -10,10 +10,10 @@ import sys
 
 # Config
 CAN_PORT = "can0"
-LOOP_DT = 0.05                # control loop (s) - sleep between cycles
+LOOP_DT = 0.01               # control loop (s) - sleep between cycles
 K_POS = 1.0                   # scale for position mapping (X_machine = X_machine0 + K_POS * delta_hand)
-MAX_LINEAR_M_S = 0.1          # not used directly if units are micrometers; used to compute smoothing
-MAX_ANGLE_DEG_S = 20.0        # deg/s for smoothing
+MAX_LINEAR_M_S = 0.3          # not used directly if units are micrometers; used to compute smoothing
+MAX_ANGLE_DEG_S = 60.0        # deg/s for smoothing
 GRIPPER_FULL_RANGE_MM = 100.0 # physical gripper range in mm
 MOVE_SPEED_PERCENT = 80
 
