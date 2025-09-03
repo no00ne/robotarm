@@ -134,8 +134,8 @@ def main():
                     Y_um = int(ev.get("Y", 0))
                     Z_um = int(ev.get("Z", 0))
                     RX_md = int(ev.get("RX", 0))-90000
-                    RY_md = int(ev.get("RY", 0))
-                    RZ_md = int(ev.get("RZ", 0))
+                    RY_md = int(ev.get("RY", 0))+90000
+                    RZ_md = int(ev.get("RZ", 0))-180000
                     pinch_strength = float(ev.get("pinch_strength", 0.0))
                 except Exception as e:
                     print("[MOCK] bad data frame format:", e, "frame:", ev)

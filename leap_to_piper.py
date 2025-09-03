@@ -191,8 +191,8 @@ def main():
                     dy = int(ev.get("Y", 0))
                     dz = int(ev.get("Z", 0))
                     rx = int(ev.get("RX", 0))-90000
-                    ry = int(ev.get("RY", 0))
-                    rz = int(ev.get("RZ", 0))
+                    ry = int(ev.get("RY", 0))+90000
+                    rz = int(ev.get("RZ", 0))-180000
                     pinch = float(ev.get("pinch_strength", 0.0))
 
                     # compute targets
