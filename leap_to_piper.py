@@ -190,7 +190,7 @@ def main():
                     dx = int(ev.get("X", 0))
                     dy = int(ev.get("Y", 0))
                     dz = int(ev.get("Z", 0))
-                    rx = int(ev.get("RX", 0))
+                    rx = int(ev.get("RX", 0))-90000
                     ry = int(ev.get("RY", 0))
                     rz = int(ev.get("RZ", 0))
                     pinch = float(ev.get("pinch_strength", 0.0))

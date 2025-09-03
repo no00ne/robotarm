@@ -16,9 +16,9 @@
 
 /* ---------- axis map: arm = (Lz, Lx, Ly) ; mm -> m ---------- */
 static inline void map_mm_to_m(const LEAP_VECTOR *L, double out_arm[3]) {
-    out_arm[0] = (double)L->z * 0.001;  /* X_arm = Z_leap (m) */
-    out_arm[1] = (double)L->x * 0.001;  /* Y_arm = X_leap */
-    out_arm[2] = (double)L->y * 0.001;  /* Z_arm = Y_leap */
+    out_arm[0] = -(double)L->z * 0.001;  /* X_arm = -Z_leap */
+    out_arm[1] = -(double)L->x * 0.001;  /* Y_arm = -X_leap */
+    out_arm[2] =  (double)L->y * 0.001;  /* Z_arm = Y_leap */
 }
 
 /* Convert Leap quaternion -> rotation matrix (row-major)
@@ -53,9 +53,12 @@ static inline void remap_rotation_to_arm(const LEAP_QUATERNION *q_leap, double R
     double RL[3][3];
     quat_to_mat3(q_leap, RL);
 
-    double M[3][3] = {{0,0,1},{1,0,0},{0,1,0}};
-    double MT[3][3] = {{0,1,0},{0,0,1},{1,0,0}};
-
+    double M[3][3]  = {{ 0, 0,-1},
+                       {-1, 0, 0},
+                       { 0, 1, 0}};
+    double MT[3][3] = {{ 0,-1, 0},
+                       { 0, 0, 1},
+                       {-1, 0, 0}};
     double T[3][3];
     for (int i=0;i<3;i++){
         for (int j=0;j<3;j++){

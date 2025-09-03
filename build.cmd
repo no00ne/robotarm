@@ -4,8 +4,7 @@ setlocal
 REM 激活 conda 环境
 call conda activate zhuaWaWaJi
 
-REM 安装/升级构建工具
-python -m pip install --upgrade build setuptools wheel
+
 
 REM 构建项目
 python -m build

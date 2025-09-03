@@ -1,6 +1,0 @@
-setup.py
-leap_ext.egg-info/PKG-INFO
-leap_ext.egg-info/SOURCES.txt
-leap_ext.egg-info/dependency_links.txt
-leap_ext.egg-info/top_level.txt
-src/leap_ext.c

@@ -133,7 +133,7 @@ def main():
                     X_um = int(ev.get("X", 0))
                     Y_um = int(ev.get("Y", 0))
                     Z_um = int(ev.get("Z", 0))
-                    RX_md = int(ev.get("RX", 0))
+                    RX_md = int(ev.get("RX", 0))-90000
                     RY_md = int(ev.get("RY", 0))
                     RZ_md = int(ev.get("RZ", 0))
                     pinch_strength = float(ev.get("pinch_strength", 0.0))
