@@ -74,28 +74,22 @@ static inline void remap_rotation_to_arm(const LEAP_QUATERNION *q_leap, double R
     }
 }
 
-/* quaternion (after remap) -> axis-angle rotation vector (millideg) */
-static inline void quat_to_axis_angle(const LEAP_QUATERNION *q, long long *RX, long long *RY, long long *RZ) {
-    double w = q->w, x = q->x, y = q->y, z = q->z;
-    double norm = sqrt(x*x + y*y + z*z + w*w);
-    if (norm > 1e-12) { x/=norm; y/=norm; z/=norm; w/=norm; }
+/* Rotation matrix (row-major) -> ZYX Euler angles (rx,ry,rz) in radians.
+   rx: roll (around X), ry: pitch (around Y), rz: yaw (around Z).
+*/
+static inline void rotmat_to_euler_zyx(const double R[3][3], double *rx, double *ry, double *rz) {
+    double r11=R[0][0], r12=R[0][1], r13=R[0][2];
+    double r21=R[1][0], r22=R[1][1], r23=R[1][2];
+    double r31=R[2][0], r32=R[2][1], r33=R[2][2];
 
-    double angle = 2.0 * acos(w);   /* [0, π] */
-    double s = sqrt(1.0 - w*w);     /* sin(theta/2) */
-    double ax=0, ay=0, az=0;
-    if (s > 1e-6) {
-        ax = x/s; ay = y/s; az = z/s;
-    }
-    double rvx = ax * angle;
-    double rvy = ay * angle;
-    double rvz = az * angle;
+    double sy = -r31;
+    if (sy <= -1.0) *ry = -M_PI_2;
+    else if (sy >= 1.0) *ry = M_PI_2;
+    else *ry = asin(sy);
 
-    double factor = 180.0/M_PI*1000.0; /* rad -> millideg */
-    *RX = (long long)llround(rvx*factor);
-    *RY = (long long)llround(rvy*factor);
-    *RZ = (long long)llround(rvz*factor);
+    *rx = atan2(r32, r33);
+    *rz = atan2(r21, r11);
 }
-
 
 /* distance squared to origin in Leap mm */
 static inline double dist2_origin_mm(const LEAP_VECTOR *p) {
@@ -277,10 +271,8 @@ static PyObject* py_next_event(PyObject* self, PyObject* args, PyObject* kwargs)
 
         double R_arm[3][3];
         remap_rotation_to_arm(&latest_palm_orient, R_arm);
-        double axis[3];
-        double angle_rad;
-        rotmat_to_axis_angle(R_arm, axis, &angle_rad);
-
+        double rx_rad, ry_rad, rz_rad;
+        rotmat_to_euler_zyx(R_arm, &rx_rad, &ry_rad, &rz_rad);
 
         double pinch_strength = (double)latest_pinch_strength;
 

@@ -34,17 +34,7 @@ if system != "Windows":
 
 leap_ext = Extension(
     "leap_ext",
-    sources=["src/leap_ext.c"],
-    include_dirs=include_dirs,
-    library_dirs=library_dirs,
-    libraries=libraries,
-    extra_compile_args=[],
-    extra_link_args=extra_link_args,
-)
-
-leap_extnew = Extension(
-    "leap_extnew",
-    sources=["src/leap_extnew.c"],
+    sources=["src/leap_ext3.c"],
     include_dirs=include_dirs,
     library_dirs=library_dirs,
     libraries=libraries,
@@ -53,8 +43,8 @@ leap_extnew = Extension(
 )
 
 setup(
-    name="leap_extensions",
+    name="leap_ext",
     version="0.1.0",
-    description="Ultraleap LeapC -> Python C extension (two variants: euler and axis-angle)",
-    ext_modules=[leap_ext, leap_extnew],
+    description="Ultraleap LeapC -> Python C extension (cross-platform)",
+    ext_modules=[leap_ext],
 )
