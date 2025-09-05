@@ -88,6 +88,10 @@ def map_gripper_units_from_pinch(pinch_strength: float) -> int:
     units = int(round(inv_mm * 1000.0))  # piper expects 0.001mm units
     return max(0, units)
 
+def wrap_angle_md(x):
+    """把角度限制到主值域 [-180000, 180000] millideg"""
+    return int(((int(x) + 180000) % 360000) - 180000)
+
 def main():
     try:
         import leap_ext
@@ -191,9 +195,19 @@ def main():
                     dx = int(ev.get("X", 0))
                     dy = int(ev.get("Y", 0))
                     dz = int(ev.get("Z", 0))
-                    rx = int(ev.get("RX", 0))-180000
-                    ry = (-int(ev.get("RY", 0)))+90000
-                    rz = int(ev.get("RZ", 0))-180000
+
+                    # RX/RY/RZ are provided in millideg (absolute, per C extension remap)
+                    RX_mdeg = int(ev.get("RX", 0))-180000
+                    RY_mdeg = (-int(ev.get("RY", 0)))+90000
+                    RZ_mdeg = int(ev.get("RZ", 0))-180000
+
+                    # If your C mapping needs additional manual adjustments (flips/offsets),
+                    # do them here. This example assumes raw values are usable after optional tweaks.
+                    # For historic tweaks you used, you can apply them — here we keep raw and wrap:
+                    rx = wrap_angle_md(RX_mdeg)
+                    ry = wrap_angle_md(RY_mdeg)
+                    rz = wrap_angle_md(RZ_mdeg)
+
                     pinch = float(ev.get("pinch_strength", 0.0))
 
                     # compute targets
